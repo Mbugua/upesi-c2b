@@ -3,28 +3,38 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use \Safaricom\Mpesa\Mpesa;
+use Illuminate\Support\Facades\Log;
 
-class MpesaClient extends FormRequest
+class MpesaClient
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
+     * C2B Payment Request
+     * @param $ShortCode
+     * @param $CommandID
+     * @param $Amount
+     * @param $BillRefNumber
      */
-    public function authorize()
-    {
-        return false;
+    static function requestC2B($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber){
+        Log::info('[MpesaClient::requestc2B] >> initialize a new Mpesa object');
+        $mpesa = new \Safaricom\Mpesa\Mpesa();
+        $c2bRequest=$mpesa->c2b($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber);
+        // $callbackData=$mpesa->getDataFromCallback();
+
+        return \response()->json([
+            'response'=>['data'=>[
+                $c2bRequest
+            ]]
+        ]);
+
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            //
-        ];
+
+    static function callback(){
+        $mpesa= new \Safaricom\Mpesa\Mpesa;
+
+        $callbackData=$mpesa->getDataFromCallback();
+        return $callbackData;
     }
+
 }
