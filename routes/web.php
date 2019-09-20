@@ -12,14 +12,10 @@ use  Illuminate\Http\Response;
 */
 
 Route::get('/', function() {
-    return response()->json([
-        'response'=>[
+    return ['response'=>[
             'web'=>'upesi-c2b',
-            'data'=>[
-                $response
-            ]
         ]
-        ],200);
+    ];
 });
 
 Route::fallback(function (Response $response) {
