@@ -1,5 +1,5 @@
 <?php
-
+use  Illuminate\Http\Response;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,6 +11,23 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function (Response $response) {
+    return response()->json([
+        'response'=>[
+            'web'=>'upesi-c2b',
+            'data'=>[
+                $response
+            ]
+        ]
+        ],200);
+});
+
+Route::fallback(function (Response $response) {
+    return response()->json([
+        'response'=>[
+            'data'=>[
+                $response
+            ]
+        ]
+        ],400);
 });
