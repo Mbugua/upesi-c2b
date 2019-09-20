@@ -1,4 +1,5 @@
 <?php
+use  Illuminate\Http\Request;
 use  Illuminate\Http\Response;
 /*
 |--------------------------------------------------------------------------
@@ -11,8 +12,14 @@ use  Illuminate\Http\Response;
 |
 */
 
-Route::get('/', function() {
-    return 'upesi-c2b';
+Route::get('/', function (Request $request) {
+    return response()->json([
+        'response'=>[
+            'data'=>[
+                $response
+            ]
+        ]
+        ],400);
 });
 
 Route::fallback(function (Response $response) {
