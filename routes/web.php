@@ -11,17 +11,3 @@ use  Illuminate\Http\Response;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return render('welcome');
-});
-
-Route::fallback(function (Response $response) {
-    return response()->json([
-        'response'=>[
-            'data'=>[
-                $response
-            ]
-        ]
-        ],400);
-});
