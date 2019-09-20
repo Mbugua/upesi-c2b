@@ -17,8 +17,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/',function(){
-    return "Hello from Heroku";
+Route::get('/',function(){
+        return response()->json([
+        'response'=>[
+            'web'=>'upesi-c2b',
+            'data'=>[
+                'message'=>"Hello Heroku"
+            ]
+        ]
+        ],200);
 });
 
 Route::post('/lodgementConfirmation','MpesaController@lodgementConfirmation')->name('lodgement');
