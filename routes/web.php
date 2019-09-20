@@ -11,7 +11,7 @@ use  Illuminate\Http\Response;
 |
 */
 
-Route::get('/', function (Response $response) {
+Route::get('/', function() {
     return response()->json([
         'response'=>[
             'web'=>'upesi-c2b',
