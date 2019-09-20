@@ -12,14 +12,8 @@ use  Illuminate\Http\Response;
 |
 */
 
-Route::get('/', function (Request $request) {
-    return response()->json([
-        'response'=>[
-            'data'=>[
-                $response
-            ]
-        ]
-        ],400);
+Route::get('/', function () {
+    return render('welcome');
 });
 
 Route::fallback(function (Response $response) {
