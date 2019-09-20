@@ -12,10 +12,7 @@ use  Illuminate\Http\Response;
 */
 
 Route::get('/', function() {
-    return ['response'=>[
-            'web'=>'upesi-c2b',
-        ]
-    ];
+    return 'upesi-c2b';
 });
 
 Route::fallback(function (Response $response) {
