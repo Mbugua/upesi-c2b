@@ -11,3 +11,11 @@ use  Illuminate\Http\Response;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::fallback(function(Response $response){
+    return \response()->json(
+        ['response'=>
+            ['data'=>[
+            'message'=>'Not allowed']
+            ]
+        ],400);
+});

@@ -29,7 +29,7 @@ Route::get('/',function(){
 });
 
 Route::post('/lodgementConfirmation','MpesaController@lodgementConfirmation')->name('lodgement');
-Route::post('/lodgementValidation','MpesaController@lodgementConfirmation')->name('validation');
+Route::post('/lodgementValidation','MpesaController@lodgementValidation')->name('validation');
 Route::post('/callback','MpesaController@callback')->name('callback');
 
 

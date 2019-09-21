@@ -20,11 +20,12 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
-        '/lodgment',
+        '/lodgement',
+        '/validation',
         '/timeout',
         '/status',
         '/reverse',
         '/stk',
-        '/callback'
+        '/callback',
     ];
 }
