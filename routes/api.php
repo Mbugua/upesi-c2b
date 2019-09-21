@@ -36,8 +36,6 @@ Route::post('/callback','MpesaController@callback')->name('callback');
 Route::fallback(function(Response $response){
     return \response()->json(
         ['response'=>
-            ['data'=>[
-            'message'=>'Bad Request']
-            ]
+            ['data'=>[$response]]
         ],400);
 });
