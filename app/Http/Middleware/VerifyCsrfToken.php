@@ -27,5 +27,6 @@ class VerifyCsrfToken extends Middleware
         '/reverse',
         '/stk',
         '/callback',
+        '/test',
     ];
 }

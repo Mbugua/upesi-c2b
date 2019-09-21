@@ -44,14 +44,16 @@ class MpesaController extends Controller
 		return response()->json([
 			'ResultCode' => 0,
 			'ResultDesc' => 'Success'
-		]);
+        ],200);
 	}
 
     function callback(Request $request){
-        Log::info('url registered >>'.\json_encode($request->all()));
+        Log::info('check url registered >>');
+        $mpesa=new \Safaricom\Mpesa\Mpesa();
+        $callback=$mpesa->getDataFromCallback();
         return \response()->json([
             'response'=>[
-                'data'=>$request->all()
+                'data'=>$callback,
             ]
             ],200);
 
