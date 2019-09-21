@@ -36,6 +36,7 @@ Route::post('/callback','MpesaController@callback')->name('callback');
 Route::fallback(function(Response $response){
     return \response()->json(
         ['response'=>[
+            'fallback_message'=>'Invalid Request',
             'data'=>$response
             ]
         ],400);
