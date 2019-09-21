@@ -37,7 +37,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily'],
+            'channels' => ['daily','single'],
             'ignore_exceptions' => false,
         ],
 
@@ -49,7 +49,7 @@ return [
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('logs/upesi-c2b.log'),
             'level' => 'debug',
             'days' => 14,
         ],
