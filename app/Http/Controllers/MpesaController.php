@@ -9,31 +9,17 @@ use Validator;
 class MpesaController extends Controller
 {
     function test(Request $request){
-        Log::info('[MpesaController::test] request' .\json_encode($request->all()));
-
-        Log::info('[MpesaController::test]');
-        // $validate=validator::make( $request->all(),['ShortCode'=>'safe',
-        //      'Amount'=>'required|numeric','Msisdn'=>'required|max:12'])->validate();
-
-        //     Log::info('[MpesaController::test]' .\json_encode($request->all()));
-        //     if($validate->validated()){
-
-
             $CommandID="CustomerPayBillOnline";
             $BillRefNumber="account";
             $Amount=$request->input('Amount');
-            $Msisdn==$request->input('Msisdn');//"2547979561830";
+            $Msisdn=$request->input('Msisdn');//"2547979561830";
             $ShortCode=env('MPESA_B2C_SHORTCODE',($request->input('ShortCode')));
-            Log::info('valid data'.\json_encode($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber ));
-             $c2b=MpesaClient::requestC2B($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber );
+
+            $c2b=MpesaClient::requestC2B($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber );
 
             var_dump($c2b);
-             return  \response()->json([
-            'response'=>['data'=>[
-                $c2b
-            ]]
-            ],200);
-        // }
+             return $c2b;
+
     }
 
     /**
@@ -58,13 +44,8 @@ class MpesaController extends Controller
 
     function callback(Request $request){
         Log::info('check url registered >>');
-        $mpesa=MpesaClient::callback();
-
-        return \response()->json([
-            'response'=>[
-                'data'=>$callback,
-            ]
-            ],200);
+        $callback=MpesaClient::getCallback();
+        return $callback;
 
     }
 }
