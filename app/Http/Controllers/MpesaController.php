@@ -16,9 +16,7 @@ class MpesaController extends Controller
             $ShortCode=env('MPESA_B2C_SHORTCODE',($request->input('ShortCode')));
 
             $c2b=MpesaClient::requestC2B($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber );
-
-            var_dump($c2b);
-             return $c2b;
+             return \response()->json(['response'=>['data'=> $c2b]],200);
 
     }
 
