@@ -10,7 +10,7 @@ class MpesaController extends Controller
 {
     function test(Request $request){
         Log::info('[MpesaController::test] request' .\json_encode($request->all()));
-        var_dump($request->all());
+
         Log::info('[MpesaController::test]');
         // $validate=validator::make( $request->all(),['ShortCode'=>'safe',
         //      'Amount'=>'required|numeric','Msisdn'=>'required|max:12'])->validate();
@@ -27,7 +27,7 @@ class MpesaController extends Controller
             Log::info('valid data'.\json_encode($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber ));
              $c2b=MpesaClient::requestC2B($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber );
 
-
+            var_dump($c2b);
              return  \response()->json([
             'response'=>['data'=>[
                 $c2b
