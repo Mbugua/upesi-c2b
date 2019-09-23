@@ -10,8 +10,9 @@ class MpesaController extends Controller
 {
     function test(Request $request){
         Log::info('[MpesaController::test] request' .\json_encode($request->all()));
+        var_dump($request->all());
         Log::info('[MpesaController::test]');
-        $validate=validator::make( $request->all(),['ShortCode'=>'required',
+        $validate=validator::make( $request->all(),['ShortCode'=>'safe',
              'Amout'=>'required|numeric','Msisdn'=>'required|max:12'])->validate();
 
             Log::info('[MpesaController::test]' .\json_encode($request->all()));
