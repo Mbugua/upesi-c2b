@@ -12,11 +12,11 @@ class MpesaController extends Controller
         Log::info('[MpesaController::test] request' .\json_encode($request->all()));
         var_dump($request->all());
         Log::info('[MpesaController::test]');
-        $validate=validator::make( $request->all(),['ShortCode'=>'safe',
-             'Amount'=>'required|numeric','Msisdn'=>'required|max:12'])->validate();
+        // $validate=validator::make( $request->all(),['ShortCode'=>'safe',
+        //      'Amount'=>'required|numeric','Msisdn'=>'required|max:12'])->validate();
 
-            Log::info('[MpesaController::test]' .\json_encode($request->all()));
-            if($validate->validated()){
+        //     Log::info('[MpesaController::test]' .\json_encode($request->all()));
+        //     if($validate->validated()){
 
 
             $CommandID="CustomerPayBillOnline";
@@ -28,8 +28,12 @@ class MpesaController extends Controller
              $c2b=MpesaClient::requestC2B($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber );
 
 
-             return $c2b;
-        }
+             return  \response()->json([
+            'response'=>['data'=>[
+                $c2b
+            ]]
+        ]);
+        // }
     }
 
     /**
@@ -54,8 +58,8 @@ class MpesaController extends Controller
 
     function callback(Request $request){
         Log::info('check url registered >>');
-        $mpesa=new \Safaricom\Mpesa\Mpesa();
-        $callback=$mpesa->getDataFromCallback();
+        $mpesa=MpesaClient::callback();
+
         return \response()->json([
             'response'=>[
                 'data'=>$callback,

@@ -21,11 +21,7 @@ class MpesaClient
         $c2bRequest=$mpesa->c2b($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber);
         // $callbackData=$mpesa->getDataFromCallback();
 
-        return \response()->json([
-            'response'=>['data'=>[
-                $c2bRequest
-            ]]
-        ]);
+        return $c2bRequest;
 
     }
 
