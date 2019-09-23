@@ -22,7 +22,7 @@ class MpesaController extends Controller
             $BillRefNumber="account";
             $Amount=$request->input('Amount');
             $Msisdn==$request->input('Msisdn');//"2547979561830";
-            $ShortCode=env('MPESA_B2C_SHORTCODE');
+            $ShortCode=env('MPESA_B2C_SHORTCODE',($request->input('ShortCode')));
             Log::info('valid data'.\json_encode($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber ));
              $c2b=MpesaClient::requestC2B($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber );
 
