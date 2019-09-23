@@ -45,7 +45,9 @@ class MpesaController extends Controller
     function callback(Request $request){
         Log::info('check url registered >>');
         $callback=MpesaClient::getCallback();
-        return $callback;
+        return \response()->json([
+            'response'=>[ 'data'=>$callback]
+        ],200);
 
     }
 }
