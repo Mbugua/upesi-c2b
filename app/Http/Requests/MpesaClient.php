@@ -30,4 +30,15 @@ class MpesaClient
         return $callbackData;
     }
 
+    static function getTransactionStatus(){
+        $mpesa= new \Safaricom\Mpesa\Mpesa();
+
+        $transactionStatus=$mpesa->transactionStatus($Initiator, $SecurityCredential, $CommandID, $TransactionID, $PartyA, $IdentifierType, $ResultURL, $QueueTimeOutURL, $Remarks, $Occasion);
+
+
+        return $transactionStatus;
+    }
+
+
+
 }

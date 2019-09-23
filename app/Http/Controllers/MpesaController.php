@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Log;
 use Validator;
 class MpesaController extends Controller
 {
+    /**
+     * simulate c2b request
+     */
     function test(Request $request){
             $CommandID="CustomerPayBillOnline";
             $BillRefNumber="account";
@@ -42,9 +45,10 @@ class MpesaController extends Controller
     function callback(Request $request){
         Log::info('check url registered >>');
         $callback=MpesaClient::getCallback();
-        Log::debug('data >>'.json_encode($callback));
+        Log::info('callback result >>'.\json_encode($callback));
         return \response()->json([
-            'response'=>[ 'data'=>$callback]
+            'ResultCode' => 0,
+			'ResultDesc' => 'Success'
         ],200);
 
     }
