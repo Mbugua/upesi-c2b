@@ -13,7 +13,7 @@ class MpesaController extends Controller
         var_dump($request->all());
         Log::info('[MpesaController::test]');
         $validate=validator::make( $request->all(),['ShortCode'=>'safe',
-             'Amout'=>'required|numeric','Msisdn'=>'required|max:12'])->validate();
+             'Amount'=>'required|numeric','Msisdn'=>'required|max:12'])->validate();
 
             Log::info('[MpesaController::test]' .\json_encode($request->all()));
             if($validate->validated()){
