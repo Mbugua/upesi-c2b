@@ -32,7 +32,7 @@ class MpesaController extends Controller
             'response'=>['data'=>[
                 $c2b
             ]]
-        ]);
+            ],200);
         // }
     }
 
