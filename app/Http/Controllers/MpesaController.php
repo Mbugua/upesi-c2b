@@ -24,7 +24,6 @@ class MpesaController extends Controller
      * C2B confirmation URL
      */
     function lodgementConfirmation(Request $request){
-        Log::info('lodgementConfirmation >>'.\json_encode($request->all()));
         return \response()->json([
             'response'=>[
                 'data'=>$request->all(),

@@ -19,8 +19,6 @@ class MpesaClient
         Log::info('[MpesaClient::requestc2B] >> initialize a new Mpesa object');
         $mpesa = new \Safaricom\Mpesa\Mpesa();
         $c2bRequest=$mpesa->c2b($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber);
-        // $callbackData=$mpesa->getDataFromCallback();
-
         return $c2bRequest;
 
     }
