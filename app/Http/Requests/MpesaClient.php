@@ -26,7 +26,7 @@ class MpesaClient
 
     static function getCallback(){
         $mpesa= new \Safaricom\Mpesa\Mpesa();
-        $callbackData=$mpesa->getDataFromCallback();
+        $callbackData=$mpesa->finishTransaction();
         return $callbackData;
     }
 
