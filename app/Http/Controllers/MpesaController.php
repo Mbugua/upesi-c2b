@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Jobs\ProcessLodgements;
 use Illuminate\Http\Request;
 use App\Http\Requests\MpesaClient;
 use Illuminate\Support\Facades\Log;
@@ -28,7 +28,9 @@ class MpesaController extends Controller
      */
     function lodgementConfirmation(Request $request){
         Log::info('lodgementConfirmation');
-        Log::info('confirmation payload >> '.json_encode($request->all()));
+        $data = $request->all();
+		$data['ip'] = $request->ip();
+		ProcessLodgements::dispatch($data)->onQueue('lodgements')->delay(3);
         return \response()->json([
                 'ResultCode'=>0,
                 'ResultDesc'=>'success'
@@ -36,7 +38,7 @@ class MpesaController extends Controller
 
     }
     function lodgementValidation(Request $request){
-        Log::info('validation payload >> '.json_encode($request->all()));
+        Log::info('validation payload >> ');
 		return response()->json([
 			'ResultCode' => 0,
 			'ResultDesc' => 'Success'
@@ -44,7 +46,6 @@ class MpesaController extends Controller
 	}
 
     function callback(Request $request){
-        Log::info('check url registered >>'.\json_encode($request->all()));
         $callback=MpesaClient::getCallback();
         Log::info('callback result >>'.\json_encode($callback));
         return \response()->json([
