@@ -34,6 +34,7 @@ class MpesaClient
     static function getTransactionStatus($TransactionID,$PartyA){
         $mpesa= new \Safaricom\Mpesa\Mpesa();
         $SecurityCredential=self::getSecurityCredential(false);
+        Log::info('security credential >> '.$SecurityCredential);
         $Initiator=env("MPESA_C2B_INITIATOR");
         $CommandID="TransactionStatusQuery";
 
@@ -48,15 +49,16 @@ class MpesaClient
     }
 
     static function getSecurityCredential($devMode=true){
-		($devMode) ? $fopen=fopen(storage_path("certs/sandboxcert.cer"),"r")
-            : $fopen=fopen(storage_path("certs/production.cer"),"r");
+		// ($devMode) ? $fopen=fopen(storage_path("certs/sandboxcert.cer"),"r")
+        //     : $fopen=fopen(storage_path("certs/production.cer"),"r");
 
-		$pub_key=fread($fopen,8192);
-        fclose($fopen);
+		// $pub_key=fread($fopen,8192);
+        // fclose($fopen);
 
-        openssl_public_encrypt(env("MPESA_SECURTIY_CREDENTIAL"),$crypttext, $pub_key );
+        // openssl_public_encrypt(env("MPESA_SECURTIY_CREDENTIAL"),$crypttext,);
 
-		return(base64_encode($crypttext));
+        // return(base64_encode($crypttext));
+        return \base64_encode(env("MPESA_SECURTIY_CREDENTIAL"));
 
     }
 
