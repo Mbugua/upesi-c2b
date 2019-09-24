@@ -40,7 +40,7 @@ class MpesaClient
         $IdentifierType= 4;
         $ResultURL=env('MPESA_C2B_RESULT_URL');
         $QueueTimeOutURL=env('MPESA_C2B_QUEUETIMEOUT_URL');
-        $remarks="Status check ". $TransactionID;
+        $Remarks="Status check ". $TransactionID;
         $Occasion="";
 
         $transactionStatus=$mpesa->transactionStatus($Initiator, $SecurityCredential, $CommandID, $TransactionID, $PartyA, $IdentifierType, $ResultURL, $QueueTimeOutURL, $Remarks, $Occasion);
