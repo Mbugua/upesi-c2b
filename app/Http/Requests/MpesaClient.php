@@ -35,6 +35,7 @@ class MpesaClient
         $mpesa= new \Safaricom\Mpesa\Mpesa();
         $SecurityCredential=self::getSecurityCredential(false);
         $Initiator=env("MPESA_C2B_INITIATOR");
+        Log::info('initiator >>'.$Initiator);
         $CommandID="TransactionStatusQuery";
 
         $IdentifierType= 4;
