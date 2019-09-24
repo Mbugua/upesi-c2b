@@ -16,7 +16,7 @@ class MpesaClient
      * @param $BillRefNumber
      */
     static function requestC2B($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber){
-        Log::info('[MpesaClient::requestc2B] >> initialize a new Mpesa object');
+        Log::info('[MpesaClient::requestc2B] >> simulate c2b payment');
         $mpesa = new \Safaricom\Mpesa\Mpesa();
         $c2bRequest=$mpesa->c2b($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber);
         return $c2bRequest;

@@ -28,8 +28,8 @@ Route::get('/',function(){
         ],200);
 });
 
-Route::post('/lodgementConfirmation','MpesaController@lodgementConfirmation')->name('lodgement');
-Route::post('/lodgementValidation','MpesaController@lodgementValidation')->name('validation');
+Route::gett('/lodgementConfirmation','MpesaController@lodgementConfirmation')->name('lodgement');
+Route::get('/lodgementValidation','MpesaController@lodgementValidation')->name('validation');
 Route::post('/callback','MpesaController@callback')->name('callback');
 Route::post('/test','MpesaController@test')->name('test');
 
