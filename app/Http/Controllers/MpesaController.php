@@ -27,6 +27,7 @@ class MpesaController extends Controller
      * C2B confirmation URL
      */
     function lodgementConfirmation(Request $request){
+        Log::info('lodgementConfirmation');
         Log::info('confirmation payload >> '.json_encode($request->all()));
         return \response()->json([
                 'ResultCode'=>0,
@@ -51,5 +52,9 @@ class MpesaController extends Controller
 			'ResultDesc' => 'Success'
         ],200);
 
+    }
+
+    function notFound(Request $request){
+        return \response()->json(['response'=>['data'=>$request->all(),'message'=>'API Route Not Found']],404);
     }
 }

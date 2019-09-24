@@ -11,15 +11,15 @@ use  Illuminate\Http\Response;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/',function(){
-    return "[upesi-c2b-api]";
-});
+// Route::get('/',function(){
+//     return "[upesi-c2b-api]";
+// });
 
 
-Route::fallback(function(Response $response){
-    return \response()->json(
-        ['response'=>[
-            'data'=>$response
-            ]
-        ],400);
-});
+// Route::fallback(function(Response $response){
+//     return \response()->json(
+//         ['response'=>[
+//             'data'=>$response
+//             ]
+//         ],400);
+// });
