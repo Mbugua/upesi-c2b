@@ -31,12 +31,12 @@ class MpesaClient
         return $callbackData;
     }
 
-    static function getTransactionStatus($TransactionID){
+    static function getTransactionStatus($TransactionID,$PartyA){
         $mpesa= new \Safaricom\Mpesa\Mpesa();
         $SecurityCredential=self::getSecurityCredential(false);
         $Initiator=env("MPESA_C2B_INITIATOR");
         $CommandID="TransactionStatusQuery";
-        $PartyA=env('MPESA_C2B_SHORTCODE');
+
         $IdentifierType= 4;
         $ResultURL=env('MPESA_C2B_RESULT_URL');
         $QueueTimeOutURL=env('MPESA_C2B_QUEUETIMEOUT_URL');

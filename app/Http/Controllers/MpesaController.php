@@ -85,9 +85,10 @@ class MpesaController extends Controller
 
     function status(Request $request){
         $TransactionID=$request->input('transactionID');
-        $status=MpesaClient::getTransactionStatus($TransactionID);
+        $PartyA=env('MPESA_C2B_SHORTCODE',$request->input('paybill'));
+        $status=MpesaClient::getTransactionStatus($TransactionID,$PartyA);
         return \response()->json(
-            ['response'=>['data'=>$status]]
+            ['response'=>['data'=>json_decode($status)]]
         );
 
     }
