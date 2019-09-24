@@ -11,7 +11,7 @@ class MpesaController extends Controller
     /**
      * simulate c2b request
      */
-    function test(Request $request){
+    function c2b(Request $request){
 
             $Amount=$request->input('Amount');
             $Msisdn=$request->input('Msisdn');

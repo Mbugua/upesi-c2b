@@ -13,15 +13,11 @@ use  Illuminate\Http\Response;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
-
 Route::post('/lodgement','MpesaController@lodgement');
 Route::post('/validation','MpesaController@validation');
-Route::post('/callback','MpesaController@callback')->name('callback');
-Route::post('/test','MpesaController@test')->name('test');
-
+Route::post('/callback','MpesaController@callback');
+Route::post('/c2b','MpesaController@c2b');
+Route::post('/timeout','MpesaController@timout');
+Route::post('/result','MpesaController@result');
+Route::post('/status','MpesaController@status');
 Route::fallback('MpesaController@notfound');

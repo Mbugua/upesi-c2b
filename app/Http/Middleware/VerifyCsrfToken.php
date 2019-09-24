@@ -24,9 +24,8 @@ class VerifyCsrfToken extends Middleware
         '/validation',
         '/timeout',
         '/status',
-        '/reverse',
-        '/stk',
+        '/result',
         '/callback',
-        '/test',
+        '/c2b',
     ];
 }
