@@ -19,8 +19,8 @@ use  Illuminate\Http\Response;
 
 
 
-Route::post('/lodgementConfirmation','MpesaController@lodgementConfirmation')->name('lodgement');
-Route::post('/lodgementValidation','MpesaController@lodgementValidation')->name('validation');
+Route::post('/lodgement','MpesaController@lodgement');
+Route::post('/validation','MpesaController@validation');
 Route::post('/callback','MpesaController@callback')->name('callback');
 Route::post('/test','MpesaController@test')->name('test');
 

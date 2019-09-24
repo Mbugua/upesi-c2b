@@ -26,7 +26,7 @@ class MpesaController extends Controller
     /**
      * C2B confirmation URL
      */
-    function lodgementConfirmation(Request $request){
+    function lodgement(Request $request){
         Log::info('lodgementConfirmation');
         $data = $request->all();
 		$data['ip'] = $request->ip();
@@ -37,7 +37,7 @@ class MpesaController extends Controller
             ],200);
 
     }
-    function lodgementValidation(Request $request){
+    function validation(Request $request){
         Log::info('validation payload >> ');
 		return response()->json([
 			'ResultCode' => 0,
