@@ -54,7 +54,7 @@ class MpesaController extends Controller
 
     }
 
-    function result(){
+    function result(Request $request){
         $input = $request->all();
 		if (isset($input['Result']) && $input['Result']['ResultCode'] === 0){
 			$parameters = $input['ResultParameters']['ResultParameter'];
