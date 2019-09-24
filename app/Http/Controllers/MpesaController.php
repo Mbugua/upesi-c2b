@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Jobs\ProcessLodgements;
+use App\Jobs\ProcessLodgement;
 use Illuminate\Http\Request;
 use App\Http\Requests\MpesaClient;
 use Illuminate\Support\Facades\Log;
@@ -12,13 +12,12 @@ class MpesaController extends Controller
      * simulate c2b request
      */
     function test(Request $request){
-            $CommandID="CustomerPayBillOnline";
-            $BillRefNumber="account";
+
             $Amount=$request->input('Amount');
-            $Msisdn=$request->input('Msisdn');//"2547979561830";
+            $Msisdn=$request->input('Msisdn');
             $ShortCode=env('MPESA_B2C_SHORTCODE',($request->input('ShortCode')));
 
-            $c2b=MpesaClient::requestC2B($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber );
+            $c2b=MpesaClient::requestC2B($ShortCode, $CommandID, $Amount, $Msisdn);
              return \response()->json(['response'=>['data'=> json_decode($c2b)]],200);
 
     }
@@ -30,7 +29,7 @@ class MpesaController extends Controller
         Log::info('lodgementConfirmation');
         $data = $request->all();
 		$data['ip'] = $request->ip();
-		ProcessLodgements::dispatch($data)->onQueue('lodgements')->delay(3);
+		ProcessLodgement::dispatch($data)->onQueue('lodgements')->delay(3);
         return \response()->json([
                 'ResultCode'=>0,
                 'ResultDesc'=>'success'
@@ -53,6 +52,48 @@ class MpesaController extends Controller
 			'ResultDesc' => 'Success'
         ],200);
 
+    }
+
+    function result(){
+        $input = $request->all();
+		if (isset($input['Result']) && $input['Result']['ResultCode'] === 0){
+			$parameters = $input['ResultParameters']['ResultParameter'];
+			foreach ($parameters as $parameter){
+				switch ($parameter['Key']){
+					case 'DebitPartyName':
+
+						break;
+				}
+			}
+			ProcessLodgement::dispatch([
+				"TransactionType" => 'Pay Utility',
+				"TransID" => $lodgement['receipt'],
+				"TransTime" => $lodgement['date'],//todo - convert
+				"TransAmount" => $lodgement['amount'],
+				"BusinessShortCode" => 299555, // todo - remove hard code
+				"BillRefNumber" => $receiptNo,
+				"OrgAccountBalance" => $lodgement['balance'],
+				"MSISDN" => $msisdn,
+				"FirstName" => isset($customerNames[0]) ? $customerNames[0] : '',
+				"MiddleName" => isset($customerNames[1]) ? $customerNames[1] : '',
+				"LastName" => isset($customerNames[2]) ? $customerNames[2] : '',
+			])->onQueue('lodgements-recon');
+		}
+		Log::error("Status Result" . json_encode($request->all()));
+
+    }
+
+    function status(Request $request){
+        $TransactionID=$request->input('transactionID');
+        $status=MpesaClient::getTransactionStatus($TransactionID);
+        return \response()->json(
+            ['response'=>['data'=>$status]]
+        );
+
+    }
+
+    function timeout(Request $request){
+        Log::error("Timeout " . json_encode($request->all()));
     }
 
     function notFound(Request $request){
