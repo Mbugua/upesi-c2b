@@ -1,0 +1,51 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/php"
+    }
+  ],
+  "env": {
+    "APP_KEY": {
+      "required": true
+    },
+    "LOG_CHANNEL": {
+      "required": true
+    },
+    "MPESA_B2C_SHORTCODE": {
+      "required": true
+    },
+    "MPESA_C2B_INITIATOR": {
+      "required": true
+    },
+    "MPESA_C2B_QUEUETIMEOUT_URL": {
+      "required": true
+    },
+    "MPESA_C2B_RESULT_URL": {
+      "required": true
+    },
+    "MPESA_CONSUMER_KEY": {
+      "required": true
+    },
+    "MPESA_CONSUMER_SECRET": {
+      "required": true
+    },
+    "MPESA_ENV": {
+      "required": true
+    },
+    "MPESA_SECURTIY_CREDENTIAL": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "upesi-c2b",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
