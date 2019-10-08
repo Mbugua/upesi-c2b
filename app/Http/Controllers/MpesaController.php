@@ -12,13 +12,14 @@ class MpesaController extends Controller
      * simulate c2b request
      */
     function c2b(Request $request){
-
+            Log:info('c2b >>>'.\json_encode($request->all()));
             $Amount=$request->input('Amount');
             $Msisdn=$request->input('Msisdn');
             $ShortCode=env('MPESA_B2C_SHORTCODE')?:($request->input('ShortCode'));
 
             $c2b=MpesaClient::requestC2B($ShortCode, $Amount, $Msisdn);
-             return \response()->json(['response'=>['data'=> json_decode($c2b)]],200);
+            Log::info('c2b response >>'.\json_encode($c2b));
+            return \response()->json(['response'=>['data'=> json_decode($c2b)]],200);
 
     }
 
@@ -26,7 +27,7 @@ class MpesaController extends Controller
      * C2B confirmation URL
      */
     function lodgement(Request $request){
-        Log::info('lodgementConfirmation');
+        Log::info('lodgementConfirmation >>',\json_encode($request->all()));
         $data = $request->all();
 		$data['ip'] = $request->ip();
 		ProcessLodgement::dispatch($data)->onQueue('lodgements')->delay(3);
@@ -37,7 +38,7 @@ class MpesaController extends Controller
 
     }
     function validation(Request $request){
-        Log::info('validation payload >> ');
+        Log::info('validation payload >> '.\json_encode($request->all()));
 		return response()->json([
 			'ResultCode' => 0,
 			'ResultDesc' => 'Success'
@@ -56,6 +57,8 @@ class MpesaController extends Controller
 
     function result(Request $request){
         $input = $request->all();
+
+        Log::info('result >>>'.\json_encode($request->all()));
 		if (isset($input['Result']) && $input['Result']['ResultCode'] === 0){
 			$parameters = $input['ResultParameters']['ResultParameter'];
 			foreach ($parameters as $parameter){
@@ -84,6 +87,7 @@ class MpesaController extends Controller
     }
 
     function status(Request $request){
+        Log::info('status >>>'.\json_encode($request->all()));
         $TransactionID=$request->input('transactionID');
         $PartyA=env('MPESA_C2B_SHORTCODE',$request->input('paybill'));
         $status=MpesaClient::getTransactionStatus($TransactionID,$PartyA);
@@ -94,7 +98,7 @@ class MpesaController extends Controller
     }
 
     function timeout(Request $request){
-        Log::error("Timeout " . json_encode($request->all()));
+        Log::error("Timeout >>>" . json_encode($request->all()));
     }
 
     function notFound(Request $request){

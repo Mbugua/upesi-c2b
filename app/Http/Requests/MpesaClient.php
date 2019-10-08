@@ -20,6 +20,7 @@ class MpesaClient
         $CommandID="CustomerPayBillOnline";
         $BillRefNumber="account";
         $c2bRequest=$mpesa->c2b($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber);
+        Log::info('requestC2B >>>>'.\json_encode($c2bRequest));
         return $c2bRequest;
 
     }
