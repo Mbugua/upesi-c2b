@@ -98,6 +98,9 @@ class MpesaController extends Controller
     }
 
     function notFound(Request $request){
-        return \response()->json(['response'=>['data'=>$request->all(),'message'=>'API Route Not Found']],404);
+        return \response()->json(['response'=>['data'=>[
+            'code'=>400,
+            'message'=>'Bad Request'
+        ]]],404);
     }
 }
