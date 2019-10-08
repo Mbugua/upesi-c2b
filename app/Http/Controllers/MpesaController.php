@@ -27,7 +27,7 @@ class MpesaController extends Controller
      * C2B confirmation URL
      */
     function lodgement(Request $request){
-        Log::info('lodgementConfirmation >>',\json_encode($request->all()));
+        Log::info('lodgementConfirmation >>'.\json_encode($request->all()));
         $data = $request->all();
 		$data['ip'] = $request->ip();
 		ProcessLodgement::dispatch($data)->onQueue('lodgements')->delay(3);
