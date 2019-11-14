@@ -35,7 +35,6 @@ class MpesaClient
     static function getTransactionStatus($TransactionID,$PartyA){
         $mpesa= new \Safaricom\Mpesa\Mpesa();
         $SecurityCredential=self::getSecurityCredentials();
-        Log::info('security credential >> '.$SecurityCredential);
         $Initiator=env("MPESA_C2B_INITIATOR");
         $CommandID="TransactionStatusQuery";
 
@@ -68,5 +67,58 @@ class MpesaClient
         openssl_public_encrypt($initiatorPass,$crypttext,$pub_key);
         $crypted=\base64_encode($crypttext);
         return $crypted;
+    }
+
+    /**
+     * C2B Register URL(s)
+     * @param validationURL - Validation URL for API
+     * @param confiramtionURL - Confirmateion URL for API
+     * @param responseType - Default response type for timeout
+     * @param shortCode - The shortcode i.e paybill
+     */
+
+    static  function registerURLS($confirmationURL,$validationURL,$shortCode){
+            $mpesa= new \Safaricom\Mpesa\Mpesa();
+        try {
+            $environment = \env("MPESA_ENV");
+        } catch (\Throwable $th) {
+            $environment = self::env("MPESA_ENV");
+        }
+
+        if( $environment =="live"){
+            $url = 'https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl';
+            $token=$mpesa->generateLiveToken();
+        }elseif ($environment=="sandbox"){
+            $url = 'https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query';
+            $token=$mpesa->generateSandBoxToken();
+        }else{
+            return json_encode(["Message"=>"invalid application status"]);
+        }
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER,
+        array('Content-Type:application/json','Authorization:Bearer'.$token));
+        //setting custom header
+
+
+        $curl_post_data = array(
+            //Fill in the request parameters with valid values
+            'ShortCode' => $shortCode,
+            'ResponseType' => 'Completed',
+            'ConfirmationURL' =>$confirmationURL,
+            'ValidationURL' => $validationURL
+        );
+
+        $data_string = json_encode($curl_post_data);
+
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
+
+        $curl_response = curl_exec($curl);
+        // print_r($curl_response);
+
+        echo $curl_response;
     }
 }

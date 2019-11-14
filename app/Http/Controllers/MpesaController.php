@@ -27,7 +27,7 @@ class MpesaController extends Controller
     /**
      * C2B confirmation URL
      */
-    function lodgement(Request $request){
+    function lodgements(Request $request){
         Log::info('<< lodgement confirmation >>'.\json_encode($request->all()));
         $data = $request->all();
 		$data['ip'] = $request->ip();
@@ -90,5 +90,26 @@ class MpesaController extends Controller
                 ]
             ]
         ],400);
+    }
+
+    /**
+     * Register C2B callbacks
+     * confirmation and validation
+     * URLs
+     */
+
+    function reqister(Request $request){
+        $shortcode=\env('MPESA_C2B_SHORTCODE',$request->shortcode);
+        $validationURL=\env('MPESA_C2B_VALIDATION_URL',$request->validation_url);
+        $confirmationURL=\env('MPESA_C2B_CONFIRMATION_URL',$request->confirmation_url);
+        Log:info('<< c2b data >>'.\json_encode([$shortcode,$validationURL,$confirmationURL]));
+        $c2bRegister=MpesaClient::registerURLS($shortcode,$confirmationURL,$validationURL);
+        Log::info("C2B register URLS >>".$c2bRegister);
+        return \response()->json(
+            ['response'=>['status'=>'success'],
+                'data'=>\json_encode($c2bRegister)
+            ]
+
+        );
     }
 }

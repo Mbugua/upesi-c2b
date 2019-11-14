@@ -13,11 +13,12 @@ use  Illuminate\Http\Response;
 |
 */
 
-Route::post('/lodgement','MpesaController@lodgement');
+Route::post('/lodgements','MpesaController@lodgements');
 Route::post('/validation','MpesaController@validation');
 Route::post('/callback','MpesaController@callback');
 Route::post('/c2b','MpesaController@c2b');
 Route::post('/timeout','MpesaController@timout');
 Route::post('/result','MpesaController@result');
 Route::post('/status','MpesaController@status');
+Route::post('/register','MpesaController@register');
 Route::fallback('MpesaController@notfound')->name('fallback');
