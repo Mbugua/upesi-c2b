@@ -15,10 +15,10 @@ class MpesaController extends Controller
             Log:info('c2b >>>'.\json_encode($request->all()));
             $Amount=$request->input('Amount');
             $Msisdn=$request->input('Msisdn');
-            $ShortCode=env('MPESA_B2C_SHORTCODE')?:($request->input('ShortCode'));
+            $ShortCode=env('MPESA_B2C_SHORTCODE', $request->input('ShortCode'));
 
             $c2b=MpesaClient::requestC2B($ShortCode, $Amount, $Msisdn);
-            Log::info('c2b response >>'.\json_encode($c2b));
+            Log::info('c2b response >>'.($c2b));
             return \response()->json(['response'=>['data'=> json_decode($c2b)]],200);
 
     }
@@ -27,7 +27,7 @@ class MpesaController extends Controller
      * C2B confirmation URL
      */
     function lodgement(Request $request){
-        Log::info('lodgementConfirmation >>'.\json_encode($request->all()));
+        Log::info('<< lodgement confirmation >>'.\json_encode($request->all()));
         $data = $request->all();
 		$data['ip'] = $request->ip();
 		ProcessLodgement::dispatch($data)->onQueue('lodgements')->delay(3);
@@ -57,33 +57,7 @@ class MpesaController extends Controller
 
     function result(Request $request){
         $input = $request->all();
-
         Log::info('result >>>'.\json_encode($request->all()));
-		if (isset($input['Result']) && $input['Result']['ResultCode'] === 0){
-			$parameters = $input['ResultParameters']['ResultParameter'];
-			foreach ($parameters as $parameter){
-				switch ($parameter['Key']){
-					case 'DebitPartyName':
-
-						break;
-				}
-			}
-			ProcessLodgement::dispatch([
-				"TransactionType" => 'Pay Utility',
-				"TransID" => $lodgement['receipt'],
-				"TransTime" => $lodgement['date'],//todo - convert
-				"TransAmount" => $lodgement['amount'],
-				"BusinessShortCode" => 299555, // todo - remove hard code
-				"BillRefNumber" => $receiptNo,
-				"OrgAccountBalance" => $lodgement['balance'],
-				"MSISDN" => $msisdn,
-				"FirstName" => isset($customerNames[0]) ? $customerNames[0] : '',
-				"MiddleName" => isset($customerNames[1]) ? $customerNames[1] : '',
-				"LastName" => isset($customerNames[2]) ? $customerNames[2] : '',
-			])->onQueue('lodgements-recon');
-		}
-		Log::error("Status Result" . json_encode($request->all()));
-
     }
 
     function status(Request $request){
