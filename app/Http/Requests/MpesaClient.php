@@ -34,7 +34,7 @@ class MpesaClient
 
     static function getTransactionStatus($TransactionID,$PartyA){
         $mpesa= new \Safaricom\Mpesa\Mpesa();
-        $SecurityCredential=self::getSecurityCredential();
+        $SecurityCredential=self::getSecurityCredentials();
         Log::info('security credential >> '.$SecurityCredential);
         $Initiator=env("MPESA_C2B_INITIATOR");
         $CommandID="TransactionStatusQuery";
