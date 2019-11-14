@@ -20,4 +20,4 @@ Route::post('/c2b','MpesaController@c2b');
 Route::post('/timeout','MpesaController@timout');
 Route::post('/result','MpesaController@result');
 Route::post('/status','MpesaController@status');
-Route::fallback('MpesaController@notfound');
+Route::fallback('MpesaController@notfound')->name('fallback');

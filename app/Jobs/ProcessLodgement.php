@@ -35,6 +35,6 @@ class ProcessLodgement implements ShouldQueue
     {
         Log::debug('Lodgement data >>'.\json_encode($this->data));
 
-        return $this->data;
+        
     }
 }

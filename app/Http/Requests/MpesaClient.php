@@ -15,12 +15,12 @@ class MpesaClient
      * @param $Amount
      * @param $BillRefNumber
      */
-    static function requestC2B($ShortCode, $Amount, $Msisdn){
+    static function c2b($ShortCode, $Amount, $Msisdn){
         $mpesa = new \Safaricom\Mpesa\Mpesa();
         $CommandID="CustomerPayBillOnline";
         $BillRefNumber="account";
         $c2bRequest=$mpesa->c2b($ShortCode, $CommandID, $Amount, $Msisdn, $BillRefNumber);
-        Log::info('requestC2B >>>>'.\json_encode($c2bRequest));
+        Log::info('<<< c2b >>>'.$c2bRequest);
         return $c2bRequest;
 
     }
@@ -34,7 +34,7 @@ class MpesaClient
 
     static function getTransactionStatus($TransactionID,$PartyA){
         $mpesa= new \Safaricom\Mpesa\Mpesa();
-        $SecurityCredential=self::getSecurityCredential(false);
+        $SecurityCredential=self::getSecurityCredential();
         Log::info('security credential >> '.$SecurityCredential);
         $Initiator=env("MPESA_C2B_INITIATOR");
         $CommandID="TransactionStatusQuery";
@@ -49,18 +49,24 @@ class MpesaClient
         return $transactionStatus;
     }
 
-    static function getSecurityCredential($devMode=true){
-		// ($devMode) ? $fopen=fopen(storage_path("certs/sandboxcert.cer"),"r")
-        //     : $fopen=fopen(storage_path("certs/production.cer"),"r");
+    /**
+     * Generate Security Credential token
+     * by encrypting API password using the public cert
+     * provided.
+     *
+     * @param envMode :sandox|production
+     * return string
+     */
+    static function getSecurityCredentials(){
+        $envMode =\env('MPESA_ENV');
+        ($envMode=='sandbox') ? $fopen=fopen(storage_path("certs/cert.cer"),"r")
+            : $fopen=fopen(storage_path("certs/Production.cer"),"r");
 
-		// $pub_key=fread($fopen,8192);
-        // fclose($fopen);
-
-        // openssl_public_encrypt(env("MPESA_SECURTIY_CREDENTIAL"),$crypttext,);
-
-        // return(base64_encode($crypttext));
-        return \base64_encode(env("MPESA_SECURTIY_CREDENTIAL"));
-
+		$pub_key=fread($fopen,8192);
+        fclose($fopen);
+        $initiatorPass=\env("MPESA_SECURITY_CREDENTIAL");
+        openssl_public_encrypt($initiatorPass,$crypttext,$pub_key);
+        $crypted=\base64_encode($crypttext);
+        return $crypted;
     }
-
 }

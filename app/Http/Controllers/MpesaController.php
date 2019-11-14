@@ -12,14 +12,16 @@ class MpesaController extends Controller
      * simulate c2b request
      */
     function c2b(Request $request){
-            Log:info('c2b >>>'.\json_encode($request->all()));
+            Log:info('simulate c2b >>>'.\json_encode($request->all()));
             $Amount=$request->input('Amount');
             $Msisdn=$request->input('Msisdn');
             $ShortCode=env('MPESA_B2C_SHORTCODE', $request->input('ShortCode'));
 
             $c2b=MpesaClient::requestC2B($ShortCode, $Amount, $Msisdn);
-            Log::info('c2b response >>'.($c2b));
-            return \response()->json(['response'=>['data'=> json_decode($c2b)]],200);
+            Log::info('c2b response >>'.$c2b);
+            return \response()->json(
+                ['response'=>['data'=> json_decode($c2b)]
+            ],200);
 
     }
 
@@ -75,10 +77,19 @@ class MpesaController extends Controller
         Log::error("Timeout >>>" . json_encode($request->all()));
     }
 
-    function notFound(Request $request){
-        return \response()->json(['response'=>['data'=>[
-            'code'=>400,
-            'message'=>'Bad Request'
-        ]]],404);
+    /**
+     * Generic fallback route
+     *
+     */
+    function notFound(){
+        return \response()->json([
+            'response'=>[
+                'status'=>'failed',
+                'data'=>[
+                    'code'=>400,
+                    'message'=>"Bad Request"
+                ]
+            ]
+        ],400);
     }
 }
