@@ -17,7 +17,7 @@ class MpesaController extends Controller
             $Msisdn=$request->input('Msisdn');
             $ShortCode=env('MPESA_B2C_SHORTCODE', $request->input('ShortCode'));
 
-            $c2b=MpesaClient::requestC2B($ShortCode, $Amount, $Msisdn);
+            $c2b=MpesaClient::c2b($ShortCode, $Amount, $Msisdn);
             Log::info('c2b response >>'.$c2b);
             return \response()->json(
                 ['response'=>['data'=> json_decode($c2b)]
