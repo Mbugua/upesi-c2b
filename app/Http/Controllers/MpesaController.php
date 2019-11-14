@@ -98,7 +98,7 @@ class MpesaController extends Controller
      * URLs
      */
 
-    function reqister(Request $request){
+    function register(Request $request){
         $shortcode=\env('MPESA_C2B_SHORTCODE',$request->shortcode);
         $validationURL=\env('MPESA_C2B_VALIDATION_URL',$request->validation_url);
         $confirmationURL=\env('MPESA_C2B_CONFIRMATION_URL',$request->confirmation_url);
