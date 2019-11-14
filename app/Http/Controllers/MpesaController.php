@@ -105,11 +105,5 @@ class MpesaController extends Controller
         Log:info('<< c2b data >>'.\json_encode([$shortcode,$validationURL,$confirmationURL]));
         $c2bRegister=MpesaClient::registerURLS($shortcode,$confirmationURL,$validationURL);
         Log::info("C2B register URLS >>".$c2bRegister);
-        return \response()->json(
-            ['response'=>['status'=>'success'],
-                'data'=>\json_encode($c2bRegister)
-            ]
-
-        );
     }
 }
