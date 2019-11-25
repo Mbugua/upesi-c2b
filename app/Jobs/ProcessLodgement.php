@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Jobs;
-use App\Lodgement;
+use App\Models\Lodgement;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -33,8 +33,10 @@ class ProcessLodgement implements ShouldQueue
      */
     public function handle()
     {
-        Log::debug('Lodgement data >>'.\json_encode($this->data));
+        //save lodgement
+        $lodgement=Lodgement::create($this->data);
+        //To Do
+        //send notification to loan api to update customer account/s
 
-        
     }
 }

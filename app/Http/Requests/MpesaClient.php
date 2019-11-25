@@ -94,7 +94,7 @@ class MpesaClient
         }else{
             return json_encode(["Message"=>"invalid application status"]);
         }
-        Log:info('check token >>>>'.\json_encode($token));
+        
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER,

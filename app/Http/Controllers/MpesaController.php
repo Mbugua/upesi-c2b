@@ -13,33 +13,55 @@ class MpesaController extends Controller
      */
     function c2b(Request $request){
             Log:info('simulate c2b >>>'.\json_encode($request->all()));
-            $Amount=$request->input('Amount');
-            $Msisdn=$request->input('Msisdn');
-            $ShortCode=env('MPESA_B2C_SHORTCODE', $request->input('ShortCode'));
 
-            $c2b=MpesaClient::c2b($ShortCode, $Amount, $Msisdn);
+            // $c2b=MpesaClient::c2b($ShortCode, $Amount, $Msisdn);
             return \response()->json(
-                ['response'=>['data'=> json_decode($c2b)]
+                ['response'=>['data'=>'success' //json_decode($c2b)
+                ]
             ],200);
 
     }
 
     /**
      * C2B confirmation URL
+     * Receives lodgements confirmations from MNO
+     * @param request
      */
     function lodgements(Request $request){
-        Log::info('<< lodgement confirmation >>'.\json_encode($request->all()));
-        $data = $request->all();
-		$data['ip'] = $request->ip();
-		ProcessLodgement::dispatch($data)->onQueue('lodgements')->delay(3);
+        Log::info('{ processing lodgement { '.\json_encode($request->all()).'} }');
+        $customerName=$request->FirstName.' '.$request->MiddleName.' '.$request->LastName;
+        // $upesiRef="cb2_XXXXXX";
+        $lodgement=[
+            'customer_name'=>(null != $customerName)?$customerName:"Anonymous",
+            'msisdn'=>(null != $request->MSISDN) ? ($request->MSISDN):'',
+            'mpesa_ref'=>( null != $request->TransID)?$request->TransID:"",
+            'amount'=>(null != $request->TransAmount)? $request->TransAmount:"",
+            'trans_time'=>(null != $request->TransTime) ? $request->TransTime:now(),
+            'transaction_type'=>(null != $request->TransactionType)?$request->TransactionType:'Pay Bill',
+            'business_shortcode'=>(null !=$request->BusinessShortCode)?$request->BusinessShortCode:\env('MPESA_C2B_SHORTCODE'),
+            'bill_refnumber'=>(null != $request->BillRefNumber)? $request->BillRefNumber :$request->MSISDN,
+            // 'invoice_number'=>(null != $request->InvoiceNumber) ?$request->InvoiceNumber : $upesiRef ,
+        ];
+        // Log::debug('creating lodgement object >>'.json_encode($lodgement));
+        ProcessLodgement::dispatch($lodgement)->onQueue('lodgements')->delay(3);
+
+        //return success to safaricom
         return \response()->json([
                 'ResultCode'=>0,
                 'ResultDesc'=>'success'
             ],200);
 
     }
+
+    /**
+     * Validate incoming lodgements
+     * Receive validation requests
+     * to verify lodgements
+     */
     function validation(Request $request){
-        Log::info('validation payload >> '.\json_encode($request->all()));
+        //log all validation requests
+        Log::info('{ validating lodgement { '.\json_encode($request->all()).'} }');
+        //return success to safaricom
 		return response()->json([
 			'ResultCode' => 0,
 			'ResultDesc' => 'Success'
@@ -48,17 +70,12 @@ class MpesaController extends Controller
 
     function callback(Request $request){
         $callback=MpesaClient::getCallback();
-        Log::info('callback result >>'.\json_encode($callback));
-        return \response()->json([
-            'ResultCode' => 0,
-			'ResultDesc' => 'Success'
-        ],200);
-
+        Log::info('{ check callback {'.\json_encode($callback).'} }');
     }
 
     function result(Request $request){
         $input = $request->all();
-        Log::info('result >>>'.\json_encode($request->all()));
+        Log::info('{ check  result {'.\json_encode($request->all()).'} }');
     }
 
     function status(Request $request){
@@ -73,11 +90,15 @@ class MpesaController extends Controller
     }
 
     function timeout(Request $request){
-        Log::error("Timeout >>>" . json_encode($request->all()));
+        Log::error('{ logging timeouts  {' . json_encode($request->all()).'} }');
+        //To Do
+        //check how to sort this later
     }
 
     /**
      * Generic fallback route
+     * handle exceptions and errors
+     * gracefully.
      *
      */
     function notFound(){
@@ -96,13 +117,17 @@ class MpesaController extends Controller
      * Register C2B callbacks
      * confirmation and validation
      * URLs
+     *
+     * Activate this only once!
      */
 
     function register(Request $request){
+        //if no env configs use form request values
         $shortcode=\env('MPESA_C2B_SHORTCODE',$request->shortcode);
         $validationURL=\env('MPESA_C2B_VALIDATION_URL',$request->validation_url);
         $confirmationURL=\env('MPESA_C2B_CONFIRMATION_URL',$request->confirmation_url);
-        Log:info('<< c2b register url  data >>'.\json_encode(['shortcode'=>$shortcode,'validation_url'=>$validationURL,'confirmation_url'=>$confirmationURL]));
-        MpesaClient::registerURLS($confirmationURL,$validationURL,$shortcode);
+        Log:info('MpesaController::registerC2BURLs >> {'.\json_encode(['shortcode'=>$shortcode,'validation_url'=>$validationURL,'confirmation_url'=>$confirmationURL]).'}');
+        //uncomment to set new callback urls.
+        // MpesaClient::registerURLS($confirmationURL,$validationURL,$shortcode);
     }
 }
