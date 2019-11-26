@@ -123,11 +123,10 @@ class MpesaController extends Controller
 
     function register(Request $request){
         //if no env configs use form request values
-        $shortcode=\env('MPESA_C2B_SHORTCODE',$request->shortcode);
-        $validationURL=\env('MPESA_C2B_VALIDATION_URL',$request->validation_url);
-        $confirmationURL=\env('MPESA_C2B_CONFIRMATION_URL',$request->confirmation_url);
+        $shortcode=(null != $request->shortcode)?$request->shortcode:\env('MPESA_C2B_SHORTCODE');
+        $validationURL=(null != $request->validation_url )? $request->validation_url:\env('MPESA_C2B_VALIDATION_URL');
+        $confirmationURL=(null != $request->confirmation_url )?$request->confirmation_url:\env('MPESA_C2B_CONFIRMATION_URL');
         Log:info('MpesaController::registerC2BURLs >> {'.\json_encode(['shortcode'=>$shortcode,'validation_url'=>$validationURL,'confirmation_url'=>$confirmationURL]).'}');
-        //uncomment to set new callback urls.
-        // MpesaClient::registerURLS($confirmationURL,$validationURL,$shortcode);
+        MpesaClient::registerURLS($confirmationURL,$validationURL,$shortcode);
     }
 }
